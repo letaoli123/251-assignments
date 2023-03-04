@@ -10,24 +10,25 @@ public class A2_Q1{
 		int numberOfMoves = numberOfMovesCheck(board);
 		//System.out.println("Current Board: \n" + Arrays.deepToString(board));
 //		//System.out.println("Board[0][3] = " + board[0][3] + "board[0][4] = " + board[0][4]);
-		int pointDifference = 2137483647;
+		int pointDifference = ;
 		if(board[0][3] == -1 && board[0][4] == -1){	//If both points are -1, then set to zero to track points, start of game
 			//System.out.println("Start of game");
 			board[0][3] = 0;
-			board[0][4] = 0;
-			board[1][4] = 2147483647;	//Set point difference to max value
+			board[0][4] = 0;			//Current score difference
+			board[1][4] = 2147483647;	//Set maximum point difference
 			board[1][3] = 0;	//Set Dad turn
 		}
-		int[][] copyBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+
 		if(numberOfMoves == 0){			//End of game scenario
 			//System.out.println("End of game");
-			pointDifference = board[0][3] - board[0][4];
-			if(pointDifference < board[1][4] && pointDifference >= 0){
-				board[1][4] = pointDifference;
-				return pointDifference;
-			}
+
+//			if(pointDifference < board[1][4] && pointDifference >= 0){
+//				board[1][4] = pointDifference;
+//				return pointDifference;
+//			}
 			//System.out.println("Point difference: " + pointDifference);
-			return pointDifference;
+
+			return 0;
 		}
 		for(int row=0; row<board.length; row++){
 			for(int col=0; col<board[0].length; col++){
@@ -38,41 +39,51 @@ public class A2_Q1{
 				if(board[row][col] == 0){
 					if(isLegalMove(board, row, col-2, row, col-1)){	//Move from West
 						//System.out.println("Move from West");
-						moveFromWest(copyBoard, row, col);
-						game_recursion(copyBoard);
+						int[][] copyBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+						int score = moveFromWest(copyBoard, row, col);
+						int recursionPoint = game_recursion(copyBoard);
+						pointDifference = score + recursionPoint;
 					}
 					if(isLegalMove(board, row, col+2, row, col+1)){	//Move from East
 						//System.out.println("Move from East");
-						moveFromEast(copyBoard, row, col);
-						game_recursion(copyBoard);
+						int[][] copyBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+						int score = moveFromEast(copyBoard, row, col);
+						int recursionPoint = game_recursion(copyBoard);
+						pointDifference = score + recursionPoint;
 					}
 					if(isLegalMove(board, row+2, col, row+1, col)){	//Move from S-W
 						//System.out.println("Move from S-W");
-						moveFromSW(copyBoard, row, col);
-						game_recursion(copyBoard);
+						int[][] copyBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+						int score = moveFromSW(copyBoard, row, col);
+						int recursionPoint = game_recursion(copyBoard);
+						pointDifference = score + recursionPoint;
 					}
 					if(isLegalMove(board, row-2, col-2, row-1, col-1)){	//Move from N-W
-						//System.out.println("Move from N-W");
-						moveFromNW(copyBoard, row, col);
-						game_recursion(copyBoard);
+						//System.out.println("Move from N-
+						int[][] copyBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+						int score = moveFromNW(copyBoard, row, col);
+						int recursionPoint = game_recursion(copyBoard);
+						pointDifference = score + recursionPoint;
 					}
 					if(isLegalMove(board, row-2, col, row-1, col)){	//Move from N-E
 						//System.out.println("Move from N-E");
-						moveFromNE(copyBoard, row, col);
-						game_recursion(copyBoard);
+						int[][] copyBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+						int score = moveFromNE(copyBoard, row, col);
+						int recursionPoint = game_recursion(copyBoard);
+						pointDifference = score + recursionPoint;
 					}
 					if(isLegalMove(board, row+2, col+2, row+1, col+1)){	//Move from S-E
 						//System.out.println("Move from S-E");
-						moveFromSE(copyBoard, row, col);
-						game_recursion(copyBoard);
+						int[][] copyBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+						int score = moveFromSE(copyBoard, row, col);
+						int recursionPoint = game_recursion(copyBoard);
+						pointDifference = score + recursionPoint;
 					}
 				}
-
-
 			}
 		}
 
-		return 0;
+		return pointDifference;
 	}
 
 
@@ -115,7 +126,7 @@ public class A2_Q1{
 		if(row >= board.length || row < 0 || col >= board[0].length || col < 0  ){		//We are outside of the pyramid
 //			//System.out.println("illegal move");
 			return false;
-		}if((board[row][col] * board[row2][col2]) <= 0 || board[row][col] == -1){			//If there are zeros in the points, then move is illegal
+		}if(((board[row][col] * board[row2][col2]) <= 0) || (board[row][col] == -1)){			//If there are zeros in the points, then move is illegal
 //			//System.out.println("illegal move");
 			return false;
 		}else{
@@ -125,13 +136,26 @@ public class A2_Q1{
 	public static int moveFromWest(int [][] board, int row, int col){
 		board[row][col] = board[row][col-2];
 		int score = board[row][col-2] * board[row][col-1];
-		board[row][col+2] = 0;
-		board[row][col+1] = 0;
+		if(board[1][3] == 0){	//If DAD TURN
+			board[1][3] = 1;
+		}else {	//If KID TURN
+			board[1][3] = 0;
+			score = score * -1; //If KID TURN, then score is negative
+		}
+		board[row][col-2] = 0;
+		board[row][col-1] = 0;
 		return score;
 	}
 	public static int moveFromEast(int [][] board, int row, int col){
 		board[row][col] = board[row][col+2];
 		int score = board[row][col+2] * board[row][col+1];
+		if(board[1][3] == 0){	//If DAD TURN
+			board[1][3] = 1;
+		}
+		else{	//If KID TURN
+			board[1][3] = 0;
+			score = score * -1; //If KID TURN, then score is negative
+		}
 		board[row][col+2] = 0;
 		board[row][col+1] = 0;
 		return score;
@@ -139,6 +163,13 @@ public class A2_Q1{
 	public static int moveFromSW(int [][] board, int row, int col){
 		board[row][col] = board[row+2][col];
 		int score = board[row+2][col] * board[row+1][col];
+		if(board[1][3] == 0){	//If DAD TURN
+			board[1][3] = 1;
+		}
+		else{	//If KID TURN
+			board[1][3] = 0;
+			score = score * -1; //If KID TURN, then score is negative
+		}
 		board[row+2][col] = 0;
 		board[row+1][col] = 0;
 		return score;
@@ -146,6 +177,13 @@ public class A2_Q1{
 	public static int moveFromNW(int [][] board, int row, int col){
 		board[row][col] = board[row-2][col-2];
 		int score = board[row-2][col-2] * board[row-1][col-1];
+		if(board[1][3] == 0){	//If DAD TURN
+			board[1][3] = 1;
+		}
+		else{	//If KID TURN
+			board[1][3] = 0;
+			score = score * -1; //If KID TURN, then score is negative
+		}
 		board[row-2][col-2] = 0;
 		board[row-1][col-1] = 0;
 		return score;
@@ -153,6 +191,13 @@ public class A2_Q1{
 	public static int moveFromNE(int [][] board, int row, int col){
 		board[row][col] = board[row-2][col];
 		int score = board[row-2][col] * board[row-1][col];
+		if(board[1][3] == 0){	//If DAD TURN
+			board[1][3] = 1;
+		}
+		else{	//If KID TURN
+			board[1][3] = 0;
+			score = score * -1; //If KID TURN, then score is negative
+		}
 		board[row-2][col] = 0;
 		board[row-1][col] = 0;
 		return score;
@@ -160,6 +205,13 @@ public class A2_Q1{
 	public static int moveFromSE(int [][] board, int row, int col){
 		board[row][col] = board[row+2][col+2];
 		int score = board[row+2][col+2] * board[row+1][col+1];
+		if(board[1][3] == 0){	//If DAD TURN
+			board[1][3] = 1;
+		}
+		else{	//If KID TURN
+			board[1][3] = 0;
+			score = score * -1; //If KID TURN, then score is negative
+		}
 		board[row+2][col+2] = 0;
 		board[row+1][col+1] = 0;
 		return score;
@@ -198,12 +250,21 @@ public class A2_Q1{
 				{1,1,1,1,-1},
 				{1,1,1,1,1}
 		};
+		int[][] smallBoard = {
+				{0,-1,-1,-1,-1},
+				{1,2,-1,-1,-1},
+				{3,4,5,-1,-1},
+				{-1,-1,-1,-1,-1},
+				{-1,-1,-1,-1,-1}
+		};
 //		int numberOfMoves = numberOfMovesCheck(board);
 //		int noMoves = numberOfMovesCheck(noMovesBoard);
 //		int numberOfMovesBIG = game_recursion(board);
 //		System.out.println("number of moves BIG TEST INSHALLAH: "+ numberOfMovesBIG);
-		int test1Moves = game_recursion(test1);
-		System.out.println("number of moves test1: "+ test1Moves);
+//		int test1Moves = game_recursion(test1);
+//		System.out.println("number of moves test1: "+ test1Moves);
+		int smallBoardMoves = game_recursion(smallBoard);
+		System.out.println("Score difference: "+ smallBoardMoves);
 //		//System.out.println("number of noMoves: "+ noMoves);
 
 	}
