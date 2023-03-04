@@ -36,125 +36,43 @@ public class A2_Q1{
 					break;
 				}
 				if(board[row][col] == 0){
-					//System.out.println("Moving pieces for 0 at row " + row + " and col " + col);
-					if(isLegalMove(board, row, col-2, row, col-1)){ //Move from West
+					if(isLegalMove(board, row, col-2, row, col-1)){	//Move from West
 						//System.out.println("Move from West");
-						board[row][col] = board[row][col-2];
-						int score = board[row][col-2] * board[row][col-1];
-						if(board[1][3] == 0) {    //If Dad's turn
-							copyBoard[0][3] += score;
-							copyBoard[1][3] = 1;	//Set Kid's turn
-						}else{					//If Kid's turn
-							copyBoard[0][4] += score;
-							copyBoard[1][3] = 0;	//Set Dad's turn
-						}
-						copyBoard[row][col-2] = 0;
-						copyBoard[row][col-1] = 0;
-						int pointDiff = game_recursion(copyBoard);
-						if(board[1][4] > pointDiff && pointDiff >= 0){
-							board[1][4] = pointDiff;
-						}
+						moveFromWest(copyBoard, row, col);
+						game_recursion(copyBoard);
 					}
-					//System.out.println("Copying board");
-					//.map(int[]::clone).toArray(int[][]::new);
-					if(isLegalMove(board, row, col+2, row, col+1)){ //Move from East
+					if(isLegalMove(board, row, col+2, row, col+1)){	//Move from East
 						//System.out.println("Move from East");
-						copyBoard[row][col] = board[row][col+2];
-						int score = copyBoard[row][col+2] * copyBoard[row][col+1];
-						if(copyBoard[1][3] == 0) {    //If Dad's turn
-							copyBoard[0][3] += score;
-							copyBoard[1][3] = 1;	//Set Kid's turn
-						}else{					//If Kid's turn
-							copyBoard[0][4] += score;
-							copyBoard[1][3] = 0;	//Set Dad's turn
-						}
-						copyBoard[row][col+2] = 0;
-						copyBoard[row][col+1] = 0;
-						int pointDiff = game_recursion(copyBoard);
-						if(board[1][4] > pointDiff && pointDiff >= 0){
-							board[1][4] = pointDiff;
-						}
+						moveFromEast(copyBoard, row, col);
+						game_recursion(copyBoard);
 					}
-					//.map(int[]::clone).toArray(int[][]::new);
-					if(isLegalMove(board, row+2, col, row+1, col)){ //Move from S-W
+					if(isLegalMove(board, row+2, col, row+1, col)){	//Move from S-W
 						//System.out.println("Move from S-W");
-						copyBoard[row][col] = copyBoard[row+2][col];
-						int score = copyBoard[row+2][col] * board[row+1][col];
-						if(copyBoard[1][3] == 0) {    //If Dad's turn
-							copyBoard[0][3] += score;
-							copyBoard[1][3] = 1;	//Set Kid's turn
-						}else{					//If Kid's turn
-							copyBoard[0][4] += score;
-							copyBoard[1][3] = 0;	//Set Dad's turn
-						}
-						copyBoard[row+2][col] = 0;
-						copyBoard[row+1][col] = 0;
-						int pointDiff = game_recursion(copyBoard);
-						if(copyBoard[1][4] > pointDiff && pointDiff >= 0){
-							copyBoard[1][4] = pointDiff;
-						}
+						moveFromSW(copyBoard, row, col);
+						game_recursion(copyBoard);
 					}
-					//.map(int[]::clone).toArray(int[][]::new);
-					if(isLegalMove(board, row-2, col-2, row-1, col-1)){ //Move from N-W
+					if(isLegalMove(board, row-2, col-2, row-1, col-1)){	//Move from N-W
 						//System.out.println("Move from N-W");
-						copyBoard[row][col] = copyBoard[row-2][col-2];
-						int score = copyBoard[row-2][col-2] * copyBoard[row-1][col-1];
-						if(copyBoard[1][3] == 0) {    //If Dad's turn
-							copyBoard[0][3] += score;
-							copyBoard[1][3] = 1;	//Set Kid's turn
-						}else{					//If Kid's turn
-							copyBoard[0][4] += score;
-							copyBoard[1][3] = 0;	//Set Dad's turn
-						}
-						copyBoard[row-2][col-2] = 0;
-						copyBoard[row-1][col-1] = 0;
-						int pointDiff = game_recursion(copyBoard);
-						if(copyBoard[1][4] > pointDiff && pointDiff >= 0){
-							copyBoard[1][4] = pointDiff;
-						}
+						moveFromNW(copyBoard, row, col);
+						game_recursion(copyBoard);
 					}
-					//.map(int[]::clone).toArray(int[][]::new);
-					if(isLegalMove(board, row-2, col, row-1, col)){ //Move from N-E
+					if(isLegalMove(board, row-2, col, row-1, col)){	//Move from N-E
 						//System.out.println("Move from N-E");
-						copyBoard[row][col] = copyBoard[row-2][col];
-						int score = copyBoard[row-2][col] * copyBoard[row-1][col];
-						if(copyBoard[1][3] == 0) {    //If Dad's turn
-							copyBoard[0][3] += score;
-							copyBoard[1][3] = 1;	//Set Kid's turn
-						}else{					//If Kid's turn
-							copyBoard[0][4] += score;
-							copyBoard[1][3] = 0;	//Set Dad's turn
-						}
-						copyBoard[row-2][col] = 0;
-						copyBoard[row-1][col] = 0;
-						int pointDiff = game_recursion(copyBoard);
-						if(copyBoard[1][4] > pointDiff && copyBoard[1][4] >= 0){
-							copyBoard[1][4] = pointDiff;
-						}
+						moveFromNE(copyBoard, row, col);
+						game_recursion(copyBoard);
 					}
-//					//.map(int[]::clone).toArray(int[][]::new);
-					if(isLegalMove(copyBoard, row+2, col+2, row+1, col+1)){ //Move from S-E
+					if(isLegalMove(board, row+2, col+2, row+1, col+1)){	//Move from S-E
 						//System.out.println("Move from S-E");
-						copyBoard[row][col] = copyBoard[row+2][col+2];
-						int score = copyBoard[row+2][col+2] * copyBoard[row+1][col+1];
-						if(copyBoard[1][3] == 0) {    //If Dad's turn
-							copyBoard[0][3] += score;
-							copyBoard[1][3] = 1;	//Set Kid's turn
-						}else{					//If Kid's turn
-							copyBoard[0][4] += score;
-							copyBoard[1][3] = 0;	//Set Dad's turn
-						}
-						copyBoard[row+2][col+2] = 0;
-						copyBoard[row+1][col+1] = 0;
-						int pointDiff = game_recursion(copyBoard);
-						if(copyBoard[1][4] > pointDiff && copyBoard[1][4] >= 0){
-							copyBoard[1][4] = pointDiff;
-						}
+						moveFromSE(copyBoard, row, col);
+						game_recursion(copyBoard);
 					}
 				}
+
+
 			}
 		}
-		return pointDifference;
+
+		return 0;
 	}
 
 
@@ -181,6 +99,17 @@ public class A2_Q1{
 		}
 		return numberOfMoves;
 	}
+	public static int numberOfZeros (int[][] board){
+		int numberOfZeros = 0;
+		for(int row=0; row<board.length; row++){
+			for(int col=0; col<board[0].length; col++){
+				if(board[row][col] == 0){
+					numberOfZeros++;
+				}
+			}
+		}
+		return numberOfZeros;
+	}
 
 	public static boolean isLegalMove (int[][] board, int row, int col, int row2, int col2){
 		if(row >= board.length || row < 0 || col >= board[0].length || col < 0  ){		//We are outside of the pyramid
@@ -192,7 +121,48 @@ public class A2_Q1{
 		}else{
 			return true;
 		}
-		
+	}
+	public static int moveFromWest(int [][] board, int row, int col){
+		board[row][col] = board[row][col-2];
+		int score = board[row][col-2] * board[row][col-1];
+		board[row][col+2] = 0;
+		board[row][col+1] = 0;
+		return score;
+	}
+	public static int moveFromEast(int [][] board, int row, int col){
+		board[row][col] = board[row][col+2];
+		int score = board[row][col+2] * board[row][col+1];
+		board[row][col+2] = 0;
+		board[row][col+1] = 0;
+		return score;
+	}
+	public static int moveFromSW(int [][] board, int row, int col){
+		board[row][col] = board[row+2][col];
+		int score = board[row+2][col] * board[row+1][col];
+		board[row+2][col] = 0;
+		board[row+1][col] = 0;
+		return score;
+	}
+	public static int moveFromNW(int [][] board, int row, int col){
+		board[row][col] = board[row-2][col-2];
+		int score = board[row-2][col-2] * board[row-1][col-1];
+		board[row-2][col-2] = 0;
+		board[row-1][col-1] = 0;
+		return score;
+	}
+	public static int moveFromNE(int [][] board, int row, int col){
+		board[row][col] = board[row-2][col];
+		int score = board[row-2][col] * board[row-1][col];
+		board[row-2][col] = 0;
+		board[row-1][col] = 0;
+		return score;
+	}
+	public static int moveFromSE(int [][] board, int row, int col){
+		board[row][col] = board[row+2][col+2];
+		int score = board[row+2][col+2] * board[row+1][col+1];
+		board[row+2][col+2] = 0;
+		board[row+1][col+1] = 0;
+		return score;
 	}
 	public static String toString(int[][] board) {
 		String boardString = "";
