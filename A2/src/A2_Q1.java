@@ -10,11 +10,11 @@ public class A2_Q1{
 		int numberOfMoves = numberOfMovesCheck(board);
 		//System.out.println("Current Board: \n" + Arrays.deepToString(board));
 //		//System.out.println("Board[0][3] = " + board[0][3] + "board[0][4] = " + board[0][4]);
-		int pointDifference = ;
+		int pointDifference = 2147483647;
 		if(board[0][3] == -1 && board[0][4] == -1){	//If both points are -1, then set to zero to track points, start of game
 			//System.out.println("Start of game");
 			board[0][3] = 0;
-			board[0][4] = 0;			//Current score difference
+			board[0][4] = 2147483647;			//Current score difference
 			board[1][4] = 2147483647;	//Set maximum point difference
 			board[1][3] = 0;	//Set Dad turn
 		}
@@ -43,6 +43,11 @@ public class A2_Q1{
 						int score = moveFromWest(copyBoard, row, col);
 						int recursionPoint = game_recursion(copyBoard);
 						pointDifference = score + recursionPoint;
+						board[0][4] = pointDifference;
+						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
+							board[1][4] = pointDifference;
+						}
+
 					}
 					if(isLegalMove(board, row, col+2, row, col+1)){	//Move from East
 						//System.out.println("Move from East");
@@ -50,6 +55,11 @@ public class A2_Q1{
 						int score = moveFromEast(copyBoard, row, col);
 						int recursionPoint = game_recursion(copyBoard);
 						pointDifference = score + recursionPoint;
+						board[0][4] = pointDifference;
+						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
+							board[1][4] = pointDifference;
+						}
+
 					}
 					if(isLegalMove(board, row+2, col, row+1, col)){	//Move from S-W
 						//System.out.println("Move from S-W");
@@ -57,6 +67,11 @@ public class A2_Q1{
 						int score = moveFromSW(copyBoard, row, col);
 						int recursionPoint = game_recursion(copyBoard);
 						pointDifference = score + recursionPoint;
+						board[0][4] = pointDifference;
+						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
+							board[1][4] = pointDifference;
+						}
+
 					}
 					if(isLegalMove(board, row-2, col-2, row-1, col-1)){	//Move from N-W
 						//System.out.println("Move from N-
@@ -64,6 +79,11 @@ public class A2_Q1{
 						int score = moveFromNW(copyBoard, row, col);
 						int recursionPoint = game_recursion(copyBoard);
 						pointDifference = score + recursionPoint;
+						board[0][4] = pointDifference;
+						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
+							board[1][4] = pointDifference;
+						}
+
 					}
 					if(isLegalMove(board, row-2, col, row-1, col)){	//Move from N-E
 						//System.out.println("Move from N-E");
@@ -71,6 +91,11 @@ public class A2_Q1{
 						int score = moveFromNE(copyBoard, row, col);
 						int recursionPoint = game_recursion(copyBoard);
 						pointDifference = score + recursionPoint;
+						board[0][4] = pointDifference;
+						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
+							board[1][4] = pointDifference;
+						}
+
 					}
 					if(isLegalMove(board, row+2, col+2, row+1, col+1)){	//Move from S-E
 						//System.out.println("Move from S-E");
@@ -78,11 +103,18 @@ public class A2_Q1{
 						int score = moveFromSE(copyBoard, row, col);
 						int recursionPoint = game_recursion(copyBoard);
 						pointDifference = score + recursionPoint;
+						board[0][4] = pointDifference;
+						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
+							board[1][4] = pointDifference;
+						}
 					}
 				}
 			}
 		}
-
+		if(board[0][4] < board[1][4] && board[0][4] >= 0){
+			board[1][4] = pointDifference;
+			return pointDifference;
+		}
 		return pointDifference;
 	}
 
@@ -252,8 +284,8 @@ public class A2_Q1{
 		};
 		int[][] smallBoard = {
 				{0,-1,-1,-1,-1},
-				{1,2,-1,-1,-1},
-				{3,4,5,-1,-1},
+				{2,1,-1,-1,-1},
+				{5,4,3,-1,-1},
 				{-1,-1,-1,-1,-1},
 				{-1,-1,-1,-1,-1}
 		};
