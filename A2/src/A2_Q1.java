@@ -18,7 +18,7 @@ public class A2_Q1{
 			board[1][4] = 2147483647;	//Set maximum point difference
 			board[1][3] = 0;	//Set Dad turn
 		}
-
+		List<Integer> scoreList = new ArrayList<Integer>();
 		if(numberOfMoves == 0){			//End of game scenario
 			//System.out.println("End of game");
 
@@ -44,6 +44,7 @@ public class A2_Q1{
 						int recursionPoint = game_recursion(copyBoard);
 						pointDifference = score + recursionPoint;
 						board[0][4] = pointDifference;
+						scoreList.add(pointDifference);
 						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
 							board[1][4] = pointDifference;
 						}
@@ -59,6 +60,7 @@ public class A2_Q1{
 						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
 							board[1][4] = pointDifference;
 						}
+						scoreList.add(pointDifference);
 
 					}
 					if(isLegalMove(board, row+2, col, row+1, col)){	//Move from S-W
@@ -71,7 +73,7 @@ public class A2_Q1{
 						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
 							board[1][4] = pointDifference;
 						}
-
+						scoreList.add(pointDifference);
 					}
 					if(isLegalMove(board, row-2, col-2, row-1, col-1)){	//Move from N-W
 						//System.out.println("Move from N-
@@ -83,7 +85,7 @@ public class A2_Q1{
 						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
 							board[1][4] = pointDifference;
 						}
-
+						scoreList.add(pointDifference);
 					}
 					if(isLegalMove(board, row-2, col, row-1, col)){	//Move from N-E
 						//System.out.println("Move from N-E");
@@ -95,7 +97,7 @@ public class A2_Q1{
 						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
 							board[1][4] = pointDifference;
 						}
-
+						scoreList.add(pointDifference);
 					}
 					if(isLegalMove(board, row+2, col+2, row+1, col+1)){	//Move from S-E
 						//System.out.println("Move from S-E");
@@ -107,15 +109,26 @@ public class A2_Q1{
 						if(board[0][4] < board[1][4] && board[0][4] >= 0) {
 							board[1][4] = pointDifference;
 						}
+						scoreList.add(pointDifference);
 					}
 				}
 			}
 		}
-		if(board[0][4] < board[1][4] && board[0][4] >= 0){
-			board[1][4] = pointDifference;
-			return pointDifference;
+//		if(board[0][4] < board[1][4] && board[0][4] >= 0){
+//			board[1][4] = pointDifference;
+//			return pointDifference;
+//		}
+		//Get maximum value from scoreList
+		if(board[1][3] == 0){
+			//System.out.println("scoreList: " + scoreList);
+			int max = Collections.max(scoreList);
+			return max;
 		}
-		return pointDifference;
+		else{
+			//System.out.println("scoreList: " + scoreList);
+			int min = Collections.min(scoreList);
+			return min;
+		}
 	}
 
 
@@ -293,10 +306,10 @@ public class A2_Q1{
 //		int noMoves = numberOfMovesCheck(noMovesBoard);
 //		int numberOfMovesBIG = game_recursion(board);
 //		System.out.println("number of moves BIG TEST INSHALLAH: "+ numberOfMovesBIG);
-//		int test1Moves = game_recursion(test1);
-//		System.out.println("number of moves test1: "+ test1Moves);
-		int smallBoardMoves = game_recursion(smallBoard);
-		System.out.println("Score difference: "+ smallBoardMoves);
+		int test1Moves = game_recursion(test1);
+		System.out.println("most optimal: "+ test1Moves);
+//		int smallBoardMoves = game_recursion(smallBoard);
+//		System.out.println("Score difference: "+ smallBoardMoves);
 //		//System.out.println("number of noMoves: "+ noMoves);
 
 	}
